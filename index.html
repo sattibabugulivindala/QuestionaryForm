@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            background-color: #9b1e26;
+        }
+        #theMainContainer{
+            background-color: white;
+            text-align: center;
+            padding: 20px 30px;
+            margin: auto;
+            width: 400px;
+            border-radius: 12px;
+        }
+        #headingText{
+            font-size: 36px;
+            font-family: 'Times New Roman', Times, serif;
+            font-weight: bold;
+        }
+        #questionText{
+            font-size: 20px;
+            font-family: 'Times New Roman', Times, serif;
+        }
+        #options-container{
+            margin-bottom: 20px;
+        }
+        #options-container button{
+            /* display: block;
+            justify-content: center;
+            align-items: center; */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: #9b1e26;
+            color: white;
+        }
+        #nextBtn{
+            padding: 5px 20px;
+            background-color: aliceblue;
+            font-size: 18px;
+            border-radius: 12px;
+            font-family: 'Times New Roman', Times, serif;
+        }
+        #nextBtn:hover{
+            background-color: #9b1e26;
+            color: white;
+            transition: 1s ease;
+        }
+        #questionSequence{
+            width: 100%;
+        }
+        #QuestionNumbering{
+            font-size: 14px;
+            font-weight: normal;
+            font-family: 'Times New Roman', Times, serif;
+        }
+    </style>
+</head>
+<body>
+    <div id="theMainContainer">
+        <h1 id="headingText">Quiz Game</h1>
+        <div id="questions">
+            <p id="questionText">Questions will appear here</p>
+            <div id="options-container"></div>
+            <div id="buttonContainer">
+                <button id="nextBtn">Next</button>
+                <div id="questionSequence">
+                    <p id="QuestionNumbering">Question 1 to 10</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    const questionary = [
+        {
+            question: "What is the tallest mountain in the world?",
+            options: ["Mount Kilimanjaro", "Mount Everest", "K2", "Kangchenjunga"],
+            FinalAnswer: 1
+        },
+        {
+            question: "Which planet is known as the Red Planet?",
+            options: ["Venus", "Mars", "Jupiter", "Saturn"],
+            FinalAnswer: 1
+        },
+        {
+            question: "Who wrote the play 'Romeo and Juliet'?",
+            options: ["William Shakespeare", "Charles Dickens", "Mark Twain", "Jane Austen"],
+            FinalAnswer: 0
+        },
+        {
+            question: "What is the capital of Australia?",
+            options: ["Sydney", "Melbourne", "Canberra", "Brisbane"],
+            FinalAnswer: 2
+        },
+        {
+            question: "Which element has the chemical symbol 'O'?",
+            options: ["Oxygen", "Osmium", "Oganesson", "Oxide"],
+            FinalAnswer: 0
+        },
+        {
+            question: "How many continents are there on Earth?",
+            options: ["5", "6", "7", "8"],
+            FinalAnswer: 2
+        },
+        {
+            question: "What is the currency of Japan?",
+            options: ["Dollar", "Yuan", "Yen", "Won"],
+            FinalAnswer: 2
+        },
+        {
+            question: "What is the largest ocean on Earth?",
+            options: ["Atlantic Ocean", "Indian Ocean", "Arctic Ocean", "Pacific Ocean"],
+            FinalAnswer: 3
+        },
+        {
+            question: "Who painted the Mona Lisa?",
+            options: ["Vincent van Gogh", "Leonardo da Vinci", "Pablo Picasso", "Claude Monet"],
+            FinalAnswer: 1
+        },
+        {
+            question: "What is the boiling point of water at sea level?",
+            options: ["90°C", "100°C", "110°C", "120°C"],
+            FinalAnswer: 1
+        }
+    ];
+
+    let currentQuestionIndex = 0;
+    let score = 0;
+    const questionElement = document.getElementById("questionText");
+    const optionsContainer = document.getElementById("options-container");
+    const nextButton = document.getElementById("nextBtn");
+    const questionSequence = document.getElementById("QuestionNumbering");
+
+    function QuestionDisplay(index) {
+        const Displayquestion = questionary[index];
+        questionElement.textContent = Displayquestion.question;
+        optionsContainer.innerHTML = "";
+        for (let i = 0; i < Displayquestion.options.length; i++) {
+            const button = document.createElement("button");
+            button.textContent = Displayquestion.options[i];
+            button.classList.add("option-button");
+            button.onclick = () => checkAnswer(i);
+            optionsContainer.appendChild(button);
+        }
+        questionSequence.textContent = `Question ${index + 1} of ${questionary.length}`;
+    }
+
+    function checkAnswer(selectedIndex) {
+        const currentQuestion = questionary[currentQuestionIndex];
+        if (selectedIndex === currentQuestion.FinalAnswer) {
+            score++;
+            alert("Correct!");
+        } else {
+            alert("Wrong!");
+        }
+        currentQuestionIndex++;
+        if (currentQuestionIndex < questionary.length) {
+            QuestionDisplay(currentQuestionIndex);
+        } else {
+            endQuiz();
+        }
+    }
+
+    function endQuiz() {
+        questionElement.textContent = `Quiz Complete! Your score is ${score} out of ${questionary.length}.`;
+        optionsContainer.innerHTML = "";
+        questionSequence.textContent = "Thank you for playing!";
+        nextButton.style.display = "none"; // Hide next button
+    }
+
+    QuestionDisplay(currentQuestionIndex);
+
+    nextButton.onclick = () => {
+        if (currentQuestionIndex < questionary.length) {
+            QuestionDisplay(currentQuestionIndex);
+        } else {
+            endQuiz();
+        }
+    };
+</script>
+</html>
