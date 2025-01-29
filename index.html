@@ -3,18 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Quiz Game</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        body{
+        body {
             display: flex;
             justify-content: center;
             align-items: center;
             margin: 0;
             padding: 0;
             height: 100vh;
-            background-color: #9b1e26;
+            background-color: #34495e
         }
-        #theMainContainer{
+        #theMainContainer {
             background-color: white;
             text-align: center;
             padding: 20px 30px;
@@ -22,22 +23,20 @@
             width: 400px;
             border-radius: 12px;
         }
-        #headingText{
+        #headingText {
             font-size: 36px;
+            color: #34495e;
             font-family: 'Times New Roman', Times, serif;
             font-weight: bold;
         }
-        #questionText{
+        #questionText {
             font-size: 20px;
             font-family: 'Times New Roman', Times, serif;
         }
-        #options-container{
+        #options-container {
             margin-bottom: 20px;
         }
-        #options-container button{
-            /* display: block;
-            justify-content: center;
-            align-items: center; */
+        #options-container button {
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -50,28 +49,33 @@
             border-radius: 5px;
             cursor: pointer;
             transition: all 0.3s;
-            background: #9b1e26;
+            background: #34495e;
             color: white;
         }
-        #nextBtn{
+        #nextBtn {
             padding: 5px 20px;
-            background-color: aliceblue;
+            color: white;
+            background-color: #34495e;
             font-size: 18px;
             border-radius: 12px;
             font-family: 'Times New Roman', Times, serif;
         }
-        #nextBtn:hover{
-            background-color: #9b1e26;
+        #nextBtn:hover {
+            background-color: #34495e;
             color: white;
             transition: 1s ease;
         }
-        #questionSequence{
+        #questionSequence {
             width: 100%;
         }
-        #QuestionNumbering{
+        #QuestionNumbering {
             font-size: 14px;
             font-weight: normal;
             font-family: 'Times New Roman', Times, serif;
+        }
+        #chartContainer {
+            display: none;
+            margin-top: 20px;
         }
     </style>
 </head>
@@ -87,6 +91,9 @@
                     <p id="QuestionNumbering">Question 1 to 10</p>
                 </div>
             </div>
+        </div>
+        <div id="chartContainer">
+            <canvas id="quizChart" width="400" height="400"></canvas>
         </div>
     </div>
 </body>
@@ -150,6 +157,8 @@
     const optionsContainer = document.getElementById("options-container");
     const nextButton = document.getElementById("nextBtn");
     const questionSequence = document.getElementById("QuestionNumbering");
+    const chartContainer = document.getElementById("chartContainer");
+    const chartCanvas = document.getElementById("quizChart");
 
     function QuestionDisplay(index) {
         const Displayquestion = questionary[index];
@@ -158,7 +167,6 @@
         for (let i = 0; i < Displayquestion.options.length; i++) {
             const button = document.createElement("button");
             button.textContent = Displayquestion.options[i];
-            button.classList.add("option-button");
             button.onclick = () => checkAnswer(i);
             optionsContainer.appendChild(button);
         }
@@ -174,18 +182,40 @@
             alert("Wrong!");
         }
         currentQuestionIndex++;
-        if (currentQuestionIndex < questionary.length) {
-            QuestionDisplay(currentQuestionIndex);
-        } else {
-            endQuiz();
-        }
+        // if (currentQuestionIndex < questionary.length) {
+        //     QuestionDisplay(currentQuestionIndex);
+        // } else {
+        //     endQuiz();
+        // }
     }
 
     function endQuiz() {
         questionElement.textContent = `Quiz Complete! Your score is ${score} out of ${questionary.length}.`;
         optionsContainer.innerHTML = "";
         questionSequence.textContent = "Thank you for playing!";
-        nextButton.style.display = "none"; // Hide next button
+        nextButton.style.display = "none";
+        displayChart();
+    }
+
+    function displayChart() {
+        chartContainer.style.display = "block";
+        const wrongAnswers = questionary.length - score;
+
+        new Chart(chartCanvas, {
+            type: "pie",
+            data: {
+                labels: ["Correct Answers", "Wrong Answers"],
+                datasets: [
+                    {
+                        data: [score, wrongAnswers],
+                        backgroundColor: ["#3498db", "#e67e22"]
+                    }
+                ]
+            },
+            options: {
+                responsive: true
+            }
+        });
     }
 
     QuestionDisplay(currentQuestionIndex);
