@@ -15,6 +15,9 @@
             height: 100vh;
             background-color: #34495e
         }
+        .green{
+            background-color: green;
+        }
         #theMainContainer {
             background-color: white;
             text-align: center;
@@ -166,20 +169,28 @@
         optionsContainer.innerHTML = "";
         for (let i = 0; i < Displayquestion.options.length; i++) {
             const button = document.createElement("button");
+            // const buttonClick=button.classList.add("green");
             button.textContent = Displayquestion.options[i];
-            button.onclick = () => checkAnswer(i);
             optionsContainer.appendChild(button);
+            button.onclick = () => checkAnswer(i);
+            
+
         }
         questionSequence.textContent = `Question ${index + 1} of ${questionary.length}`;
     }
 
     function checkAnswer(selectedIndex) {
         const currentQuestion = questionary[currentQuestionIndex];
+        const selectedButton=optionsContainer.children[selectedIndex]
         if (selectedIndex === currentQuestion.FinalAnswer) {
+            // alert("Right")
+            selectedButton.style.backgroundColor="green";
             score++;
-            alert("Correct!");
         } else {
-            alert("Wrong!");
+            // alert("Wrong!");
+            selectedButton.style.backgroundColor="red";
+            const correctButtonIndex=optionsContainer.children[currentQuestion.FinalAnswer];
+            correctButtonIndex.style.backgroundColor="green";
         }
         currentQuestionIndex++;
         // if (currentQuestionIndex < questionary.length) {
@@ -187,6 +198,7 @@
         // } else {
         //     endQuiz();
         // }
+        
     }
 
     function endQuiz() {
