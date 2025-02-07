@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quiz Game</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body {
             display: flex;
@@ -67,6 +66,7 @@
             background-color: #34495e;
             color: white;
             transition: 1s ease;
+            cursor: pointer;
         }
         #questionSequence {
             width: 100%;
@@ -80,6 +80,7 @@
             display: none;
             margin-top: 20px;
         }
+
     </style>
 </head>
 <body>
@@ -99,145 +100,175 @@
             <canvas id="quizChart" width="400" height="400"></canvas>
         </div>
     </div>
-</body>
-<script>
-    const questionary = [
-        {
-            question: "What is the tallest mountain in the world?",
-            options: ["Mount Kilimanjaro", "Mount Everest", "K2", "Kangchenjunga"],
-            FinalAnswer: 1
-        },
-        {
-            question: "Which planet is known as the Red Planet?",
-            options: ["Venus", "Mars", "Jupiter", "Saturn"],
-            FinalAnswer: 1
-        },
-        {
-            question: "Who wrote the play 'Romeo and Juliet'?",
-            options: ["William Shakespeare", "Charles Dickens", "Mark Twain", "Jane Austen"],
-            FinalAnswer: 0
-        },
-        {
-            question: "What is the capital of Australia?",
-            options: ["Sydney", "Melbourne", "Canberra", "Brisbane"],
-            FinalAnswer: 2
-        },
-        {
-            question: "Which element has the chemical symbol 'O'?",
-            options: ["Oxygen", "Osmium", "Oganesson", "Oxide"],
-            FinalAnswer: 0
-        },
-        {
-            question: "How many continents are there on Earth?",
-            options: ["5", "6", "7", "8"],
-            FinalAnswer: 2
-        },
-        {
-            question: "What is the currency of Japan?",
-            options: ["Dollar", "Yuan", "Yen", "Won"],
-            FinalAnswer: 2
-        },
-        {
-            question: "What is the largest ocean on Earth?",
-            options: ["Atlantic Ocean", "Indian Ocean", "Arctic Ocean", "Pacific Ocean"],
-            FinalAnswer: 3
-        },
-        {
-            question: "Who painted the Mona Lisa?",
-            options: ["Vincent van Gogh", "Leonardo da Vinci", "Pablo Picasso", "Claude Monet"],
-            FinalAnswer: 1
-        },
-        {
-            question: "What is the boiling point of water at sea level?",
-            options: ["90°C", "100°C", "110°C", "120°C"],
-            FinalAnswer: 1
-        }
-    ];
-
-    let currentQuestionIndex = 0;
-    let score = 0;
-    const questionElement = document.getElementById("questionText");
-    const optionsContainer = document.getElementById("options-container");
-    const nextButton = document.getElementById("nextBtn");
-    const questionSequence = document.getElementById("QuestionNumbering");
-    const chartContainer = document.getElementById("chartContainer");
-    const chartCanvas = document.getElementById("quizChart");
-
-    function QuestionDisplay(index) {
-        const Displayquestion = questionary[index];
-        questionElement.textContent = Displayquestion.question;
-        optionsContainer.innerHTML = "";
-        for (let i = 0; i < Displayquestion.options.length; i++) {
-            const button = document.createElement("button");
-            // const buttonClick=button.classList.add("green");
-            button.textContent = Displayquestion.options[i];
-            optionsContainer.appendChild(button);
-            button.onclick = () => checkAnswer(i);
-            
-
-        }
-        questionSequence.textContent = `Question ${index + 1} of ${questionary.length}`;
-    }
-
-    function checkAnswer(selectedIndex) {
-        const currentQuestion = questionary[currentQuestionIndex];
-        const selectedButton=optionsContainer.children[selectedIndex]
-        if (selectedIndex === currentQuestion.FinalAnswer) {
-            // alert("Right")
-            selectedButton.style.backgroundColor="green";
-            score++;
-        } else {
-            // alert("Wrong!");
-            selectedButton.style.backgroundColor="red";
-            const correctButtonIndex=optionsContainer.children[currentQuestion.FinalAnswer];
-            correctButtonIndex.style.backgroundColor="green";
-        }
-        currentQuestionIndex++;
-        // if (currentQuestionIndex < questionary.length) {
-        //     QuestionDisplay(currentQuestionIndex);
-        // } else {
-        //     endQuiz();
-        // }
-        
-    }
-
-    function endQuiz() {
-        questionElement.textContent = `Quiz Complete! Your score is ${score} out of ${questionary.length}.`;
-        optionsContainer.innerHTML = "";
-        questionSequence.textContent = "Thank you for playing!";
-        nextButton.style.display = "none";
-        displayChart();
-    }
-
-    function displayChart() {
-        chartContainer.style.display = "block";
-        const wrongAnswers = questionary.length - score;
-
-        new Chart(chartCanvas, {
-            type: "pie",
-            data: {
-                labels: ["Correct Answers", "Wrong Answers"],
-                datasets: [
-                    {
-                        data: [score, wrongAnswers],
-                        backgroundColor: ["#3498db", "#e67e22"]
-                    }
-                ]
+    <script>
+        const questionary = [
+            {
+                question: "What is the tallest mountain in the world?",
+                options: ["Mount Kilimanjaro", "Mount Everest", "K2", "Kangchenjunga"],
+                FinalAnswer: 1
             },
-            options: {
-                responsive: true
+            {
+                question: "Which planet is known as the Red Planet?",
+                options: ["Venus", "Mars", "Jupiter", "Saturn"],
+                FinalAnswer:1
+            },
+            {
+                question: "Who wrote the play 'Romeo and Juliet'?",
+                options: ["William Shakespeare", "Charles Dickens", "Mark Twain", "Jane Austen"],
+                FinalAnswer: 0
+            },
+            {
+                question: "What is the capital of Australia?",
+                options: ["Sydney", "Melbourne", "Canberra", "Brisbane"],
+                FinalAnswer: 2
+            },
+            {
+                question: "Which element has the chemical symbol 'O'?",
+                options: ["Oxygen", "Osmium", "Oganesson", "Oxide"],
+                FinalAnswer: 0
+            },
+            {
+                question: "How many continents are there on Earth?",
+                options: ["5", "6", "7", "8"],
+                FinalAnswer: 2
+            },
+            {
+                question: "What is the currency of Japan?",
+                options: ["Dollar", "Yuan", "Yen", "Won"],
+                FinalAnswer: 2
+            },
+            {
+                question: "What is the largest ocean on Earth?",
+                options: ["Atlantic Ocean", "Indian Ocean", "Arctic Ocean", "Pacific Ocean"],
+                FinalAnswer: 3
+            },
+            {
+                question: "Who painted the Mona Lisa?",
+                options: ["Vincent van Gogh", "Leonardo da Vinci", "Pablo Picasso", "Claude Monet"],
+                FinalAnswer: 1
+            },
+            {
+                question: "What is the boiling point of water at sea level?",
+                options: ["90°C", "100°C", "110°C", "120°C"],
+                FinalAnswer: 1
             }
-        });
-    }
-
-    QuestionDisplay(currentQuestionIndex);
-
-    nextButton.onclick = () => {
-        if (currentQuestionIndex < questionary.length) {
-            QuestionDisplay(currentQuestionIndex);
-        } else {
-            endQuiz();
+        ];
+    
+        let currentQuestionIndex = 0;
+        let score = 0;
+        const questionElement = document.getElementById("questionText");
+        const optionsContainer = document.getElementById("options-container");
+        const nextButton = document.getElementById("nextBtn");
+        const questionSequence = document.getElementById("QuestionNumbering");
+        const chartContainer = document.getElementById("chartContainer");
+        const chartCanvas = document.getElementById("quizChart");
+    
+        function QuestionDisplay(index) {
+            const Displayquestion = questionary[index];
+            questionElement.textContent = Displayquestion.question;
+            optionsContainer.innerHTML = "";
+            for (let i = 0; i < Displayquestion.options.length; i++) {
+                const button = document.createElement("button");
+                // const buttonClick=button.classList.add("green");
+                button.textContent = Displayquestion.options[i];
+                button.setAttribute("id",Displayquestion.options[i])
+                optionsContainer.appendChild(button);
+                
+                button.onclick = () => checkAnswer(i);
+                
+    
+            }
+            questionSequence.textContent = `Question ${index + 1} of ${questionary.length}`;
         }
-    };
-</script>
+    
+        function checkAnswer(selectedIndex) {
+            const currentQuestion = questionary[currentQuestionIndex];
+            const selectedButton=optionsContainer.children[selectedIndex]
+            console.log(currentQuestion)
+            if (selectedIndex === currentQuestion.FinalAnswer) {
+                // alert("Right")
+                selectedButton.style.backgroundColor="green";
+
+                score++;
+            } else {
+                // alert("Wrong!");
+                selectedButton.style.backgroundColor="red";
+                const correctButtonIndex=optionsContainer.children[currentQuestion.FinalAnswer];
+                correctButtonIndex.style.backgroundColor="green";
+                console.log(currentQuestion.FinalAnswer)
+            }
+            
+            // currentQuestionIndex++;
+            // if (currentQuestionIndex < questionary.length) {
+            //     QuestionDisplay(currentQuestionIndex);
+            // } else {
+            //     endQuiz();
+            // }
+            for (let i = 0; i < optionsContainer.children.length; i++) {
+                
+            optionsContainer.children[i].disabled = true;
+            optionsContainer.children[i].style.cursor = "not-allowed";
+            optionsContainer.children[i].style.opacity = "0.6"; 
+            
+            if (i == currentQuestion.FinalAnswer){
+                optionsContainer.children[i].disabled = false;
+                optionsContainer.children[i].style.cursor = "pointer";
+                optionsContainer.children[i].style.opacity = "1"; 
+                
+
+            }
+           
+        }
+
+            
+    }
+        
+    
+        function endQuiz() {
+            questionElement.textContent = `Quiz Complete! Your score is ${score} out of ${questionary.length}.`;
+            optionsContainer.innerHTML = "";
+            questionSequence.textContent = "Thank you for playing!";
+            nextButton.style.display = "none";
+            displayChart();
+        }
+    
+        function displayChart() {
+            chartContainer.style.display = "block";
+            const wrongAnswers = questionary.length - score;
+    
+            new Chart(chartCanvas, {
+                type: "pie",
+                data: {
+                    labels: ["Correct Answers", "Wrong Answers"],
+                    datasets: [
+                        {
+                            data: [score, wrongAnswers],
+                            backgroundColor: ["#3498db", "#e67e22"]
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true
+                }
+            });
+        }
+    
+        QuestionDisplay(currentQuestionIndex);
+    
+        nextButton.onclick = () => {
+            currentQuestionIndex++
+            if (currentQuestionIndex < questionary.length) {
+                QuestionDisplay(currentQuestionIndex);
+            } else {
+                endQuiz();
+            }
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</body>
+
+
 </html>
+
+
